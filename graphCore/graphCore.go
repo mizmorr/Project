@@ -15,9 +15,20 @@ type graph struct {
 	coreNumber []int
 }
 
+func contains(r []int, e int) bool {
+	for _, j := range r {
+		if j == e {
+			return true
+		}
+	}
+	return false
+}
+
 func (g graph) addEdge(vertex_fst int, vertex_snd int) {
-	g.adj[vertex_fst] = append(g.adj[vertex_fst], vertex_snd)
-	g.adj[vertex_snd] = append(g.adj[vertex_snd], vertex_fst)
+	if !contains(g.adj[vertex_fst], vertex_snd) && vertex_fst != vertex_snd {
+		g.adj[vertex_fst] = append(g.adj[vertex_fst], vertex_snd)
+		g.adj[vertex_snd] = append(g.adj[vertex_snd], vertex_fst)
+	}
 }
 
 func (g graph) graphLabel() (res []int) {
