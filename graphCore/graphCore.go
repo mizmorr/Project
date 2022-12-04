@@ -123,13 +123,72 @@ func (g graph) k_coreLabel() {
 	}
 }
 
-func Different_Mark(list []int) (g graph, m_v map[int]int) {
-	g = GraphCreateV(len(list))
-	m_v = make(map[int]int)
-	for i := range list {
-		m_v[i] = list[i]
+func (g graph) Particular_K_CoreM(k int, m_v map[int]string) {
+	w := func() []int {
+		ar := []int{}
+		for i := range g.coreNumber {
+			if g.coreNumber[i] == k {
+				ar = append(ar, i)
+			}
+		}
+		return ar
+	}()
+	if len(w) == 0 {
+		fmt.Println("no such k-core found")
+	} else {
+		fmt.Println(k, " - core:")
+		for _, i := range w {
+			fmt.Print(m_v[i], " ")
+		}
+		fmt.Println()
 	}
-	return
+}
+
+func (g graph) MaxKCoreM(m_v map[int]string) {
+	var max int = g.coreNumber[0]
+	for _, i := range g.coreNumber {
+		if i > max {
+			max = i
+		}
+	}
+	g.Particular_K_CoreM(max, m_v)
+}
+
+func (g graph) All_K_Cores() {
+	klist := g.coreNumber
+	k2 := make(map[int]int)
+	for i := range klist {
+		if _, ok := k2[klist[i]]; !ok {
+			k2[klist[i]] = 0
+			g.Particular_K_Core(klist[i])
+		}
+	}
+}
+
+func (g graph) All_K_CoresM(m_v map[int]string) {
+	klist := g.coreNumber
+	k2 := make(map[int]int)
+	for i := range klist {
+		if _, ok := k2[klist[i]]; !ok {
+			k2[klist[i]] = 0
+			g.Particular_K_CoreM(klist[i], m_v)
+		}
+	}
+}
+
+func getMark(s string) []string {
+	var result []string
+	f, err := ioutil.ReadFile(s)
+	if err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(strings.NewReader(string(f)))
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		s := strings.Split(scanner.Text(), ",")
+		result = append(result, s[1])
+	}
+	return result
 }
 func FirstSample() (g1 graph) {
 	g1 = GraphCreateV(9)
@@ -178,74 +237,12 @@ func (g graph) Particular_K_Core(k int) {
 	}
 }
 
-func (g graph) MaxKCore() {
-	var max int = g.coreNumber[0]
-	for _, i := range g.coreNumber {
-		if i > max {
-			max = i
-		}
-	}
-	fmt.Println(max)
-}
-func (g graph) TestMaxCore() {
+func (g graph) MaxCore() {
 	t := make([]int, len(g.coreNumber))
 	copy(t, g.coreNumber)
 	sort.Ints(t)
 	var max = t[len(t)-1]
 	fmt.Print(max)
-}
-
-func (g graph) Particular_K_CoreM(k int, m_v map[int]int) {
-	w := func() []int {
-		ar := []int{}
-		for i := range g.coreNumber {
-			if g.coreNumber[i] == k {
-				ar = append(ar, i)
-			}
-		}
-		return ar
-	}()
-	if len(w) == 0 {
-		fmt.Println("no such k-core found")
-	} else {
-		fmt.Println(k, " - core:")
-		for _, i := range w {
-			fmt.Print(m_v[i], " ")
-		}
-		fmt.Println()
-	}
-}
-
-func (g graph) MaxKCoreM(m_v map[int]int) {
-	var max int = g.coreNumber[0]
-	for _, i := range g.coreNumber {
-		if i > max {
-			max = i
-		}
-	}
-	g.Particular_K_CoreM(max, m_v)
-}
-
-func (g graph) All_K_Cores() {
-	klist := g.coreNumber
-	k2 := make(map[int]int)
-	for i := range klist {
-		if _, ok := k2[klist[i]]; !ok {
-			k2[klist[i]] = 0
-			g.Particular_K_Core(klist[i])
-		}
-	}
-}
-
-func (g graph) All_K_CoresM(m_v map[int]int) {
-	klist := g.coreNumber
-	k2 := make(map[int]int)
-	for i := range klist {
-		if _, ok := k2[klist[i]]; !ok {
-			k2[klist[i]] = 0
-			g.Particular_K_CoreM(klist[i], m_v)
-		}
-	}
 }
 
 func makeGtxt(txt []int, V int) graph {
