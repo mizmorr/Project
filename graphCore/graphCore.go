@@ -47,6 +47,7 @@ func makeRange(min, max int) []int {
 	}
 	return a
 }
+
 func Erdos_Renyi(g graph, prob float32) {
 	for j := range g.adj {
 		for k := range g.adj {
