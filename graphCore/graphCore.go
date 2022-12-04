@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
@@ -45,6 +46,16 @@ func makeRange(min, max int) []int {
 		a[i] = min + i
 	}
 	return a
+}
+func Erdos_Renyi(g graph, prob float32) {
+	for j := range g.adj {
+		for k := range g.adj {
+			p := rand.Float32()
+			if k != j && p <= prob == true {
+				g.addEdge(k, j)
+			}
+		}
+	}
 }
 func GraphCreateV(V int) (g graph) {
 	vert_list := make([][]int, V)
