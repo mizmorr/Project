@@ -198,6 +198,21 @@ func (g graph) MaxKCore() {
 	g.Particular_K_Core(max)
 }
 
+func Lastfm_Sample(num int) {
+	g := GraphCreateV(7624)
+	edges := getEdges("graphCore/lastfm_asia_edges.txt")
+	makeGDM(g, edges)
+	g.k_coreLabel()
+	switch num {
+	case 0:
+		g.All_K_Cores()
+	case 1:
+		g.MaxKCore()
+	default:
+		g.Particular_K_Core(num)
+	}
+}
+
 func (g graph) All_K_Cores() {
 	klist := g.coreNumber
 	k2 := make(map[int]int)
@@ -254,30 +269,17 @@ func getEdges(s string) []int {
 	}
 	return result
 }
-func FirstSample() (g1 graph) {
-	g1 = GraphCreateV(9)
-	g1.addEdge(0, 1)
-	g1.addEdge(0, 2)
-	g1.addEdge(0, 3)
-	g1.addEdge(0, 4)
-	g1.addEdge(0, 5)
-	g1.addEdge(1, 2)
-	g1.addEdge(1, 3)
-	g1.addEdge(1, 4)
-	g1.addEdge(1, 5)
-	g1.addEdge(2, 3)
-	g1.addEdge(2, 4)
-	g1.addEdge(2, 5)
-	g1.addEdge(2, 6)
-	g1.addEdge(3, 6)
-	g1.addEdge(3, 7)
-	g1.addEdge(3, 4)
-	g1.addEdge(4, 8)
-	g1.addEdge(5, 6)
-	g1.addEdge(6, 7)
-	g1.addEdge(7, 8)
-	g1.k_coreLabel()
-	return
+func FirstSample(num int) {
+	g := MakeG_txt("graphCore/first_sample.txt", 9)
+	switch num {
+	case 0:
+		g.All_K_Cores()
+	case 1:
+		g.MaxKCore()
+	default:
+		g.Particular_K_Core(num)
+	}
+
 }
 
 func GitSample() (graph, map[int]string) {
@@ -287,11 +289,7 @@ func GitSample() (graph, map[int]string) {
 	makeGDM(g, edges)
 	return g, mark
 }
-func UnderGit1() {
-	g, m := GitSample()
-	g.k_coreLabel()
-	m[1] = "s"
-}
+
 func (g graph) Particular_K_Core(k int) {
 	w := func() []int {
 		ar := []int{}
