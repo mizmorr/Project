@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"math/rand"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -67,6 +66,15 @@ func GraphCreateV(V int) (g graph) {
 	}
 	coreNums := make([]int, V)
 	g = graph{vert_list, coreNums}
+	return
+}
+
+func GraphCreate_DM(list []string) (g graph, m_v map[int]string) {
+	g = GraphCreateV(len(list))
+	m_v = make(map[int]string)
+	for i := range list {
+		m_v[i] = list[i]
+	}
 	return
 }
 
@@ -143,6 +151,32 @@ func (g graph) Particular_K_CoreM(k int, m_v map[int]string) {
 		fmt.Println()
 	}
 }
+func makeRandEdges(g graph) {
+	for j := range g.adj {
+		k := rand.Intn(len(g.adj))
+		prob := rand.Intn(2)
+		if prob != 0 {
+			g.addEdge(j, k)
+		}
+	}
+}
+func RandG_almostSparse(V int) graph {
+	g := GraphCreateV(V)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	return g
+}
+
+func RandG_bigDensity(V int) graph {
+	g := GraphCreateV(V)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	return g
+}
 
 func (g graph) MaxKCoreM(m_v map[int]string) {
 	var max int = g.coreNumber[0]
@@ -152,6 +186,16 @@ func (g graph) MaxKCoreM(m_v map[int]string) {
 		}
 	}
 	g.Particular_K_CoreM(max, m_v)
+}
+
+func (g graph) MaxKCore() {
+	var max int = g.coreNumber[0]
+	for _, i := range g.coreNumber {
+		if i > max {
+			max = i
+		}
+	}
+	g.Particular_K_Core(max)
 }
 
 func (g graph) All_K_Cores() {
@@ -190,6 +234,26 @@ func getMark(s string) []string {
 	}
 	return result
 }
+func getEdges(s string) []int {
+	var result []int
+	f, err := ioutil.ReadFile(s)
+	if err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(strings.NewReader(string(f)))
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		s := strings.Split(scanner.Text(), ",")
+		for _, j := range s {
+			postj, err := strconv.Atoi(j)
+			if err != nil {
+				panic(err)
+			}
+			result = append(result, postj)
+		}
+	}
+	return result
+}
 func FirstSample() (g1 graph) {
 	g1 = GraphCreateV(9)
 	g1.addEdge(0, 1)
@@ -216,6 +280,18 @@ func FirstSample() (g1 graph) {
 	return
 }
 
+func GitSample() (graph, map[int]string) {
+	premark := getMark("graphCore/git_marks.txt")
+	g, mark := GraphCreate_DM(premark)
+	edges := getEdges("graphCore/git_edges.txt")
+	makeGDM(g, edges)
+	return g, mark
+}
+func UnderGit1() {
+	g, m := GitSample()
+	g.k_coreLabel()
+	m[1] = "s"
+}
 func (g graph) Particular_K_Core(k int) {
 	w := func() []int {
 		ar := []int{}
@@ -237,20 +313,18 @@ func (g graph) Particular_K_Core(k int) {
 	}
 }
 
-func (g graph) MaxCore() {
-	t := make([]int, len(g.coreNumber))
-	copy(t, g.coreNumber)
-	sort.Ints(t)
-	var max = t[len(t)-1]
-	fmt.Print(max)
-}
-
 func makeGtxt(txt []int, V int) graph {
 	g := GraphCreateV(V)
 	for i := 0; i < len(txt)-1; i += 2 {
 		g.addEdge(txt[i], txt[i+1])
 	}
 	return g
+}
+func makeGDM(g graph, txt []int) {
+	for i := 0; i < len(txt)-1; i += 2 {
+		g.addEdge(txt[i], txt[i+1])
+	}
+
 }
 func makeInt_frm_txt(r io.Reader) ([]int, error) {
 	scanner := bufio.NewScanner(r)
