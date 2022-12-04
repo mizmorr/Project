@@ -160,14 +160,14 @@ func makeRandEdges(g graph) {
 		}
 	}
 }
-func RandG_almostSparse(V int) graph {
+func randG_almostSparse(V int) graph {
 	g := GraphCreateV(V)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	return g
 }
 
-func RandG_bigDensity(V int) graph {
+func randG_bigDensity(V int) graph {
 	g := GraphCreateV(V)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
@@ -280,6 +280,30 @@ func FirstSample(num int) {
 		g.Particular_K_Core(num)
 	}
 
+}
+func randomBG_Graph(v int, num int) {
+	g := randG_bigDensity(v)
+	g.k_coreLabel()
+	switch num {
+	case 0:
+		g.All_K_Cores()
+	case 1:
+		g.MaxKCore()
+	default:
+		g.Particular_K_Core(num)
+	}
+}
+func RandomS_Graph(v int, num int) {
+	g := randG_almostSparse(v)
+	g.k_coreLabel()
+	switch num {
+	case 0:
+		g.All_K_Cores()
+	case 1:
+		g.MaxKCore()
+	default:
+		g.Particular_K_Core(num)
+	}
 }
 
 func GitSample() (graph, map[int]string) {
