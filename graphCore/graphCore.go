@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type graph struct {
@@ -47,7 +48,8 @@ func makeRange(min, max int) []int {
 	return a
 }
 
-func Erdos_Renyi(g graph, prob float32) {
+func Erdos_Renyi(v int, prob float32, num int) {
+	g := graphCreateV(v)
 	for j := range g.adj {
 		for k := range g.adj {
 			p := rand.Float32()
@@ -56,8 +58,17 @@ func Erdos_Renyi(g graph, prob float32) {
 			}
 		}
 	}
+	switch num {
+	case 0:
+		g.all_K_Cores()
+	case 1:
+		g.maxKCore()
+	default:
+		g.particular_K_Core(num)
+	}
 }
-func GraphCreateV(V int) (g graph) {
+
+func graphCreateV(V int) (g graph) {
 	vert_list := make([][]int, V)
 	i := 0
 	for i < V {
@@ -69,8 +80,8 @@ func GraphCreateV(V int) (g graph) {
 	return
 }
 
-func GraphCreate_DM(list []string) (g graph, m_v map[int]string) {
-	g = GraphCreateV(len(list))
+func graphCreate_DM(list []string) (g graph, m_v map[int]string) {
+	g = graphCreateV(len(list))
 	m_v = make(map[int]string)
 	for i := range list {
 		m_v[i] = list[i]
@@ -91,7 +102,20 @@ func remove(a []int, key int) (r []int) {
 
 	return
 }
+func SecondSample(num int) {
+	premark := getMark("graphCore/second_sample_marks.txt")
+	g, mark := graphCreate_DM(premark)
+	g.k_coreLabel()
+	switch num {
+	case 0:
+		g.all_K_CoresM(mark)
+	case 1:
+		g.maxKCoreM(mark)
+	default:
+		g.particular_K_CoreM(num, mark)
+	}
 
+}
 func removeArray(a [][]int, key int) (ar [][]int) {
 	set := make(map[int][]int)
 	for j := range a {
@@ -131,7 +155,7 @@ func (g graph) k_coreLabel() {
 	}
 }
 
-func (g graph) Particular_K_CoreM(k int, m_v map[int]string) {
+func (g graph) particular_K_CoreM(k int, m_v map[int]string) {
 	w := func() []int {
 		ar := []int{}
 		for i := range g.coreNumber {
@@ -161,76 +185,78 @@ func makeRandEdges(g graph) {
 	}
 }
 func randG_almostSparse(V int) graph {
-	g := GraphCreateV(V)
+	g := graphCreateV(V)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
+	time.Sleep(time.Millisecond * 1)
 	return g
 }
 
 func randG_bigDensity(V int) graph {
-	g := GraphCreateV(V)
+	g := graphCreateV(V)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
+	time.Sleep(time.Millisecond * 1)
 	return g
 }
 
-func (g graph) MaxKCoreM(m_v map[int]string) {
+func (g graph) maxKCoreM(m_v map[int]string) {
 	var max int = g.coreNumber[0]
 	for _, i := range g.coreNumber {
 		if i > max {
 			max = i
 		}
 	}
-	g.Particular_K_CoreM(max, m_v)
+	g.particular_K_CoreM(max, m_v)
 }
 
-func (g graph) MaxKCore() {
+func (g graph) maxKCore() {
 	var max int = g.coreNumber[0]
 	for _, i := range g.coreNumber {
 		if i > max {
 			max = i
 		}
 	}
-	g.Particular_K_Core(max)
+	g.particular_K_Core(max)
 }
 
 func Lastfm_Sample(num int) {
-	g := GraphCreateV(7624)
+	g := graphCreateV(7624)
 	edges := getEdges("graphCore/lastfm_asia_edges.txt")
 	makeGDM(g, edges)
 	g.k_coreLabel()
 	switch num {
 	case 0:
-		g.All_K_Cores()
+		g.all_K_Cores()
 	case 1:
-		g.MaxKCore()
+		g.maxKCore()
 	default:
-		g.Particular_K_Core(num)
+		g.particular_K_Core(num)
 	}
 }
 
-func (g graph) All_K_Cores() {
+func (g graph) all_K_Cores() {
 	klist := g.coreNumber
 	k2 := make(map[int]int)
 	for i := range klist {
 		if _, ok := k2[klist[i]]; !ok {
 			k2[klist[i]] = 0
-			g.Particular_K_Core(klist[i])
+			g.particular_K_Core(klist[i])
 		}
 	}
 }
 
-func (g graph) All_K_CoresM(m_v map[int]string) {
+func (g graph) all_K_CoresM(m_v map[int]string) {
 	klist := g.coreNumber
 	k2 := make(map[int]int)
 	for i := range klist {
 		if _, ok := k2[klist[i]]; !ok {
 			k2[klist[i]] = 0
-			g.Particular_K_CoreM(klist[i], m_v)
+			g.particular_K_CoreM(klist[i], m_v)
 		}
 	}
 }
@@ -269,52 +295,59 @@ func getEdges(s string) []int {
 	}
 	return result
 }
+func printG(g graph) {
+	for _, j := range g.adj {
+		fmt.Println(j)
+	}
+}
 func FirstSample(num int) {
 	g := MakeG_txt("graphCore/first_sample.txt", 9)
+	g.k_coreLabel()
 	switch num {
 	case 0:
-		g.All_K_Cores()
+		g.all_K_Cores()
 	case 1:
-		g.MaxKCore()
+		g.maxKCore()
 	default:
-		g.Particular_K_Core(num)
+		g.particular_K_Core(num)
 	}
 
 }
-func randomBG_Graph(v int, num int) {
+func RandomBG_Graph(v int, num int) {
 	g := randG_bigDensity(v)
 	g.k_coreLabel()
 	switch num {
 	case 0:
-		g.All_K_Cores()
+		g.all_K_Cores()
 	case 1:
-		g.MaxKCore()
+		g.maxKCore()
 	default:
-		g.Particular_K_Core(num)
+		g.particular_K_Core(num)
 	}
+
 }
 func RandomS_Graph(v int, num int) {
 	g := randG_almostSparse(v)
 	g.k_coreLabel()
 	switch num {
 	case 0:
-		g.All_K_Cores()
+		g.all_K_Cores()
 	case 1:
-		g.MaxKCore()
+		g.maxKCore()
 	default:
-		g.Particular_K_Core(num)
+		g.particular_K_Core(num)
 	}
 }
 
 func GitSample() (graph, map[int]string) {
 	premark := getMark("graphCore/git_marks.txt")
-	g, mark := GraphCreate_DM(premark)
+	g, mark := graphCreate_DM(premark)
 	edges := getEdges("graphCore/git_edges.txt")
 	makeGDM(g, edges)
 	return g, mark
 }
 
-func (g graph) Particular_K_Core(k int) {
+func (g graph) particular_K_Core(k int) {
 	w := func() []int {
 		ar := []int{}
 		for i := range g.coreNumber {
@@ -336,7 +369,7 @@ func (g graph) Particular_K_Core(k int) {
 }
 
 func makeGtxt(txt []int, V int) graph {
-	g := GraphCreateV(V)
+	g := graphCreateV(V)
 	for i := 0; i < len(txt)-1; i += 2 {
 		g.addEdge(txt[i], txt[i+1])
 	}
