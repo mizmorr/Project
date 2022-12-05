@@ -367,7 +367,6 @@ func (g graph) particular_K_Core(k int) (res string) {
 		for _, i := range w {
 			res += fmt.Sprint(i, " ")
 		}
-		res += fmt.Sprintln('\n')
 	}
 	return
 }

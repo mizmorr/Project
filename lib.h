@@ -68,11 +68,12 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern void firstSample(GoInt p0);
-extern void BigDensity(GoInt p0, GoInt p1);
-extern void Sparse(GoInt p0, GoInt p1);
-extern void Erdos_Renyi(GoFloat32 p0, GoInt p1, GoInt p2);
-extern void SecondSample(GoInt p0);
+extern char* firstSample(int p0);
+extern char* BigDensity(int p0, int p1);
+extern char* Sparse(int p0, int p1);
+extern char* Erdos_Renyi(float p0, int p1, int p2);
+extern char* Last_Sample(int p0);
+extern char* SecondSample(int p0);
 
 #ifdef __cplusplus
 }

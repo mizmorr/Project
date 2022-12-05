@@ -3,33 +3,50 @@ package main
 import (
 	"C"
 	"Project/graphCore"
-	// "fmt"
-	// "time"
+	"fmt"
+	// "reflect"
+	// "strconv"
+	"time"
 )
 
 //export firstSample
-func firstSample(num int) string {
-	return graphCore.FirstSample(num)
+func firstSample(num C.int) *C.char {
+	start := time.Now()
+	var g = graphCore.FirstSample(int(num))
+	duration := time.Since(start)
+	dur := fmt.Sprintln(duration.Seconds())
+	res := dur + g
+	return C.CString(res)
 }
 
 //export BigDensity
-func BigDensity(v, num int) string {
-	return graphCore.RandomBG_Graph(v, num)
+func BigDensity(v, num C.int) *C.char {
+	var g = graphCore.RandomBG_Graph(int(v), int(num))
+	return C.CString(g)
 }
 
 //export Sparse
-func Sparse(v, num int) string {
-	return graphCore.RandomS_Graph(v, num)
+func Sparse(v, num C.int) *C.char {
+	var g = graphCore.RandomS_Graph(int(v), int(num))
+	return C.CString(g)
 }
 
 //export Erdos_Renyi
-func Erdos_Renyi(prob float32, v, num int) string {
-	return graphCore.Erdos_Renyi(v, prob, num)
+func Erdos_Renyi(prob C.float, v, num C.int) *C.char {
+	var g = graphCore.Erdos_Renyi(int(v), float32(prob), int(num))
+	return C.CString(g)
+}
+
+//export Last_Sample
+func Last_Sample(num C.int) *C.char {
+	var g = graphCore.Lastfm_Sample(int(num))
+	return C.CString(g)
 }
 
 //export SecondSample
-func SecondSample(num int) string {
-	return graphCore.SecondSample(num)
+func SecondSample(num C.int) *C.char {
+	var g = graphCore.SecondSample(int(num))
+	return C.CString(g)
 }
 func main() {
 }
