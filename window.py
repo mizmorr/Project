@@ -1,7 +1,5 @@
 #!/usr/bin/python
 import sys  
-import os  
-import ctypes
 from PyQt5 import QtWidgets
 
 

@@ -45,8 +45,13 @@ func Last_Sample(num C.int) *C.char {
 
 //export SecondSample
 func SecondSample(num C.int) *C.char {
+	start := time.Now()
 	var g = graphCore.SecondSample(int(num))
-	return C.CString(g)
+	duration := time.Since(start)
+	dur := fmt.Sprintln(duration.Seconds())
+	res := dur + g
+	return C.CString(res)
 }
+
 func main() {
 }

@@ -9,9 +9,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ctypes
+import ctypes, time
 so = ctypes.cdll.LoadLibrary('./lib.so')
 
+def strconv(s):
+    farr  = s.split('\n')
+    list.reverse(farr)
+    time2 = list.pop(farr)
+    list.reverse(farr)
+    fstring = '\n'.join(farr) 
+    return time2, fstring
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -63,7 +70,7 @@ class Ui_MainWindow(object):
         self.pushButton_9.setGeometry(QtCore.QRect(210, 250, 71, 31))
         self.pushButton_9.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../b9dd41c/icons8-play-button-circled-100.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_9.setIcon(icon)
         self.pushButton_9.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_9.setObjectName("pushButton_9")
@@ -149,7 +156,7 @@ class Ui_MainWindow(object):
         self.toolBox = QtWidgets.QToolBox(self.centralwidget)
         self.toolBox.setGeometry(QtCore.QRect(20, 470, 291, 321))
         palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(246, 245, 244))
+        brush = QtGui.QBrush(QtGui.QColor(26, 95, 180))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(246, 245, 244))
@@ -158,7 +165,7 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(28, 113, 216))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(26, 95, 180))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ToolTipText, brush)
         brush = QtGui.QBrush(QtGui.QColor(145, 145, 144))
@@ -285,8 +292,46 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
-        self.toolBox.setCurrentIndex(1)
+        self.toolBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.pushButton_6.released.connect(self.btnFirst_go)
+        self.pushButton_7.released.connect(self.btnSecond_go)
+
+    def btnFirst_go(self):
+            fs = so.firstSample 
+            num = self.spinBox_6.value()
+            fs.restype = ctypes.c_void_p
+            fs.argtypes=[ctypes.c_int]
+            fsout = fs(num)
+            self.progressBar_6.setValue(0)
+            time.sleep(0.025)
+            self.progressBar_6.setValue(100)
+            fbytes = ctypes.string_at(fsout)
+            fstring = fbytes.decode('utf-8')
+            time2,fstring = strconv(fstring)
+            if fstring=="no such k-core found\n":
+                 self.label_18.setText("")
+            else:
+                self.label_18.setText(time2)
+            self.plainTextEdit_2.setPlainText(fstring)
+    
+    def btnSecond_go(self):
+            fs = so.SecondSample 
+            num = self.spinBox_7.value()
+            fs.restype = ctypes.c_void_p
+            fs.argtypes=[ctypes.c_int]
+            fsout = fs(num)
+            self.progressBar_7.setValue(0)
+            time.sleep(0.025)
+            self.progressBar_7.setValue(100)
+            fbytes = ctypes.string_at(fsout)
+            fstring = fbytes.decode('utf-8')
+            time2,fstring = strconv(fstring)
+            if fstring=="no such k-core found\n":
+                 self.label_24.setText("")
+            else:
+                self.label_24.setText(time2)
+            self.plainTextEdit_3.setPlainText(fstring)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
