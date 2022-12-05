@@ -105,6 +105,8 @@ func remove(a []int, key int) (r []int) {
 func SecondSample(num int) string {
 	premark := getMark("graphCore/second_sample_marks.txt")
 	g, mark := graphCreate_DM(premark)
+	edges := getEdges("graphCore/second_sample.txt")
+	makeGDM(g, edges)
 	g.k_coreLabel()
 	switch num {
 	case 0:
@@ -114,7 +116,6 @@ func SecondSample(num int) string {
 	default:
 		return g.particular_K_CoreM(num, mark)
 	}
-
 }
 func removeArray(a [][]int, key int) (ar [][]int) {
 	set := make(map[int][]int)
