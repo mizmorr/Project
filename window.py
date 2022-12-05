@@ -1,29 +1,22 @@
 #!/usr/bin/python
+import sys  
+import os  
 import ctypes
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import sys
-so = ctypes.cdll.LoadLibrary('./lib.so')
+from PyQt5 import QtWidgets
 
-class MainWindow(QMainWindow):
+
+import design  
+
+class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Project")
-        self.fsbutton = QPushButton(self,text = 'First Sample')
-        # self.input = QTextEdit(self)
-        # self.input.move(10,10)
-        # self.btnhtml=QPushButton(self,text='HTML')
-        # self.btnhtml.move(120,10)
-        # self.btntxt=QPushButton(self,text='TXT')
-        # self.btntxt.move(120,50)
-        # self.btnq=QPushButton(self,text="Quit")
-        # self.btnq.move(10,50)
-        self.setFixedSize(600,400)
+        self.setupUi(self)  
+        
+def main():
+    app = QtWidgets.QApplication(sys.argv) 
+    window = ExampleApp()  
+    window.show()  
+    app.exec_()  
 
-
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-
-app.exec()
+if __name__ == '__main__':  
+    main()  
