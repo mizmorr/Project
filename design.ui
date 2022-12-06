@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -99,36 +99,13 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>140</y>
         <width>124</width>
         <height>19</height>
        </rect>
       </property>
       <property name="text">
        <string>Time processing</string>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="spinBox_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>121</width>
-        <height>28</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_7">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>70</y>
-        <width>111</width>
-        <height>18</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Set parameter</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="progressBar_2">
@@ -167,24 +144,43 @@
        </size>
       </property>
      </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>21</y>
+        <width>271</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Nodes count</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Parameter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Almost sparse</string>
      </attribute>
-     <widget class="QLabel" name="label_10">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>70</y>
-        <width>111</width>
-        <height>18</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Set parameter</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
@@ -198,16 +194,6 @@
        <string/>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>121</width>
-        <height>28</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QProgressBar" name="progressBar_3">
       <property name="geometry">
        <rect>
@@ -219,19 +205,6 @@
       </property>
       <property name="value">
        <number>0</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_9">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
-        <width>124</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Time processing</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_8">
@@ -256,6 +229,51 @@
         <height>25</height>
        </size>
       </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>129</width>
+        <height>46</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Time processing</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>21</y>
+        <width>271</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Nodes count</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_3"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Parameter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -294,29 +312,6 @@
       </size>
      </property>
     </widget>
-    <widget class="QSpinBox" name="spinBox_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>121</width>
-       <height>28</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_11">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>124</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Time processing</string>
-     </property>
-    </widget>
     <widget class="QProgressBar" name="progressBar_4">
      <property name="geometry">
       <rect>
@@ -343,18 +338,60 @@
       <string/>
      </property>
     </widget>
-    <widget class="QLabel" name="label_13">
+    <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>100</y>
-       <width>111</width>
-       <height>18</height>
+       <x>10</x>
+       <y>170</y>
+       <width>129</width>
+       <height>46</height>
       </rect>
      </property>
      <property name="text">
-      <string>Set parameter</string>
+      <string>Time processing</string>
      </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>271</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>Nodes count</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_5"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>Parameter</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_6"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_26">
+        <property name="text">
+         <string>Probability</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_7"/>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
@@ -586,7 +623,7 @@
      <enum>QFrame::NoFrame</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="geometry">
