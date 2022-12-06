@@ -338,6 +338,8 @@ class Ui_MainWindow(object):
         self.pushButton_7.released.connect(self.btnSecond_go)
         self.pushButton_9.released.connect(self.btnBig)
         self.pushButton_8.released.connect(self.btnSparse)
+        self.pushButton_4.released.connect(self.btn_ER)
+        
         
     def btnFirst_go(self):
             fs = so.firstSample 
@@ -400,11 +402,11 @@ class Ui_MainWindow(object):
         sparse = so.Sparse
         v = int(self.lineEdit_3.text())
         param = int(self.lineEdit_4.text())
-        self.progressBar_2.setValue(0)
+        self.progressBar_3.setValue(0)
         sparse.restype = ctypes.c_void_p
         sparse.argtypes=[ctypes.c_int]
         spgout = sparse(v,param)
-        self.progressBar_2.setValue(100)
+        self.progressBar_3.setValue(100)
         spbytes = ctypes.string_at(spgout)
         spstring = spbytes.decode('utf-8')
         time2,spstring = strconv(spstring)
@@ -415,7 +417,30 @@ class Ui_MainWindow(object):
         file = open(fname+"/sparse.txt",'w')
         file.write(spstring)
         file.close()
+    def btn_ER(self):
+        fname = QFileDialog.getExistingDirectory(self,"Open Directory",'/home/mzzmor')
+        er = so.Erdos_Renyi
+        v = int(self.lineEdit_5.text())
+        param = int(self.lineEdit_6.text())
+        prob = float(self.lineEdit_7.text())
+        self.progressBar_4.setValue(0)
+        er.restype = ctypes.c_void_p
+        er.argtypes=[ctypes.c_float,ctypes.c_int]
+        erout = er(prob,v,param)
+        self.progressBar_4.setValue(100)
+        erbytes = ctypes.string_at(erout)
+        erstr = erbytes.decode('utf-8')
+        time2, erstr = strconv(erstr)
+        if erstr=="no such k-core found\n":
+                self.label_12.setText("")
+        else:
+                self.label_12.setText(time2)
+        file = open(fname+"/ER.txt",'w')
+        file.write(erstr)
+        file.close()
     
+        
+        
         
         
         

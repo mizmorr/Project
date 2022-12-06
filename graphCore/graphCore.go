@@ -58,6 +58,7 @@ func Erdos_Renyi(v int, prob float32, num int) string {
 			}
 		}
 	}
+	g.k_coreLabel()
 	switch num {
 	case 0:
 		return g.all_K_Cores()
