@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import ctypes, time
 so = ctypes.cdll.LoadLibrary('./lib.so')
 def strconv(s):
@@ -63,7 +63,9 @@ class Ui_MainWindow(object):
         self.pushButton_9.setGeometry(QtCore.QRect(210, 250, 71, 31))
         self.pushButton_9.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        q=QtGui.QIcon()
+        q.addPixmap(QtGui.QPixmap("icons/q.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_9.setIcon(icon)
         self.pushButton_9.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_9.setObjectName("pushButton_9")
@@ -339,7 +341,19 @@ class Ui_MainWindow(object):
         self.pushButton_9.released.connect(self.btnBig)
         self.pushButton_8.released.connect(self.btnSparse)
         self.pushButton_4.released.connect(self.btn_ER)
-        
+        self.pushButton_5.released.connect(self.btn_Last)
+        self.tool = QtWidgets.QToolButton(MainWindow)
+        self.tool.setGeometry(QtCore.QRect(610, 5, 51, 25))
+        self.tool.setText("")
+        self.tool.setObjectName("toolButton")
+        self.tool.released.connect(self.help)
+        self.tool.setIcon(q)
+    def help(self):
+        msg = QMessageBox()
+        # msg.setIcon(QMessageBox.information)   
+        msg.setWindowTitle("help")
+        msg.setText("0 - print all k-cores\n1 - print max k-core\nn - print n-core, if it exist")     
+        ret = msg.exec()        
         
     def btnFirst_go(self):
             fs = so.firstSample 
@@ -358,6 +372,7 @@ class Ui_MainWindow(object):
             else:
                 self.label_18.setText(time2)
             self.plainTextEdit_2.setPlainText(fstring)
+    
     def btnSecond_go(self):
             fs = so.SecondSample 
             num = self.spinBox_7.value()
@@ -417,6 +432,7 @@ class Ui_MainWindow(object):
         file = open(fname+"/sparse.txt",'w')
         file.write(spstring)
         file.close()
+        
     def btn_ER(self):
         fname = QFileDialog.getExistingDirectory(self,"Open Directory",'/home/mzzmor')
         er = so.Erdos_Renyi
@@ -439,6 +455,25 @@ class Ui_MainWindow(object):
         file.write(erstr)
         file.close()
     
+    def btn_Last(self):
+        fname = QFileDialog.getExistingDirectory(self,"Open Directory",'/home/mzzmor')
+        ls = so.Last_Sample
+        param = self.spinBox_5.value()
+        self.progressBar_5.setValue(0)
+        ls.restype = ctypes.c_void_p
+        ls.argtypes=[ctypes.c_int]
+        lsout = ls(param)
+        self.progressBar_5.setValue(100)
+        lsbytes = ctypes.string_at(lsout)
+        lsstr = lsbytes.decode('utf-8')
+        time2, lsstr = strconv(lsstr)
+        if lsstr=="no such k-core found\n":
+                self.label_14.setText("")
+        else:
+                self.label_14.setText(time2)
+        file = open(fname+"/LastFm.txt",'w')
+        file.write(lsstr)
+        file.close()
         
         
         
