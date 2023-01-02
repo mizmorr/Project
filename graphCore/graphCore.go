@@ -53,19 +53,23 @@ func Erdos_Renyi(v int, prob float32, num int) string {
 	for j := range g.adj {
 		for k := range g.adj {
 			p := rand.Float32()
-			if k != j && p <= prob == true {
+			if k != j && p <= prob-0.2 == true {
 				g.addEdge(k, j)
 			}
 		}
 	}
+	t := time.Now()
 	g.k_coreLabel()
+	d := time.Since(t)
+	duration := fmt.Sprintln(d.Seconds())
+	density := fmt.Sprintln(g.calculate_Density())
 	switch num {
 	case 0:
-		return g.all_K_Cores()
+		return duration + density + g.all_K_Cores()
 	case 1:
-		return g.maxKCore()
+		return duration + density + g.maxKCore()
 	default:
-		return g.particular_K_Core(num)
+		return duration + density + g.particular_K_Core(num)
 	}
 }
 
@@ -108,14 +112,16 @@ func SecondSample(num int) string {
 	g, mark := graphCreate_DM(premark)
 	edges := getEdges("graphCore/second_sample.txt")
 	makeGDM(g, edges)
+	t := time.Now()
 	g.k_coreLabel()
+	duration := fmt.Sprintln(time.Since(t).Seconds())
 	switch num {
 	case 0:
-		return g.all_K_CoresM(mark)
+		return duration + g.all_K_CoresM(mark)
 	case 1:
-		return g.maxKCoreM(mark)
+		return duration + g.maxKCoreM(mark)
 	default:
-		return g.particular_K_CoreM(num, mark)
+		return duration + g.particular_K_CoreM(num, mark)
 	}
 }
 func removeArray(a [][]int, key int) (ar [][]int) {
@@ -178,6 +184,15 @@ func (g graph) particular_K_CoreM(k int, m_v map[int]string) (res string) {
 	}
 	return
 }
+func (g graph) calculate_Density() float64 {
+	var sum int
+	for j := range g.adj {
+		sum += len(g.adj[j])
+	}
+	maxEdge_count := float64((len(g.adj)) * (len(g.adj) - 1) / 2)
+	currentEdge_count := float64(sum / 2)
+	return currentEdge_count / maxEdge_count
+}
 func makeRandEdges(g graph) {
 	for j := range g.adj {
 		k := rand.Intn(len(g.adj))
@@ -195,8 +210,15 @@ func randG_almostSparse(V int) graph {
 	return g
 }
 
-func randG_bigDensity(V int) graph {
+func randG_mediumDensity(V int) graph {
 	g := graphCreateV(V)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
+	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
 	go makeRandEdges(g)
@@ -280,6 +302,7 @@ func getMark(s string) []string {
 	}
 	return result
 }
+
 func getEdges(s string) []int {
 	var result []int
 	f, err := ioutil.ReadFile(s)
@@ -300,51 +323,55 @@ func getEdges(s string) []int {
 	}
 	return result
 }
-func printG(g graph) {
-	for _, j := range g.adj {
-		fmt.Println(j)
-	}
-}
+
 func FirstSample(num int) string {
 	g := MakeG_txt("graphCore/first_sample.txt", 9)
+	t := time.Now()
 	g.k_coreLabel()
+	duration := fmt.Sprintln(time.Since(t).Seconds())
 	switch num {
 	case 0:
-		return g.all_K_Cores()
+		return duration + g.all_K_Cores()
 	case 1:
-		return g.maxKCore()
+		return duration + g.maxKCore()
 	default:
-		return g.particular_K_Core(num)
+		return duration + g.particular_K_Core(num)
 	}
-
 }
-func RandomBG_Graph(v int, num int) string {
-	g := randG_bigDensity(v)
+
+func RandomM_Graph(v int, num int) string {
+	g := randG_mediumDensity(v)
+	t := time.Now()
 	g.k_coreLabel()
+	density := fmt.Sprintln(g.calculate_Density())
+	duration := fmt.Sprintln(time.Since(t).Seconds())
 	switch num {
 	case 0:
-		return g.all_K_Cores()
+		return duration + density + g.all_K_Cores()
 	case 1:
-		return g.maxKCore()
+		return duration + density + g.maxKCore()
 	default:
-		return g.particular_K_Core(num)
+		return duration + density + g.particular_K_Core(num)
 	}
-
 }
+
 func RandomS_Graph(v int, num int) string {
 	g := randG_almostSparse(v)
+	t := time.Now()
 	g.k_coreLabel()
+	duration := fmt.Sprintln(time.Since(t).Seconds())
+	density := fmt.Sprintln(g.calculate_Density())
 	switch num {
 	case 0:
-		return g.all_K_Cores()
+		return duration + density + g.all_K_Cores()
 	case 1:
-		return g.maxKCore()
+		return duration + density + g.maxKCore()
 	default:
-		return g.particular_K_Core(num)
+		return duration + density + g.particular_K_Core(num)
 	}
 }
 
-func GitSample() (graph, map[int]string) {
+func gitSample() (graph, map[int]string) {
 	premark := getMark("graphCore/git_marks.txt")
 	g, mark := graphCreate_DM(premark)
 	edges := getEdges("graphCore/git_edges.txt")

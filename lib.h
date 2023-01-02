@@ -69,7 +69,7 @@ extern "C" {
 #endif
 
 extern char* firstSample(int p0);
-extern char* BigDensity(int p0, int p1);
+extern char* MediumDensity(int p0, int p1);
 extern char* Sparse(int p0, int p1);
 extern char* Erdos_Renyi(float p0, int p1, int p2);
 extern char* Last_Sample(int p0);
